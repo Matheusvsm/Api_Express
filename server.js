@@ -1,31 +1,15 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const multer = require('multer');
-
+const cors = require('cors');
+const usersRouter = require('./routers/Users');
 
 const app = express();
 
-app.use(bodyParser.json());
-const upload = multer({ dest: 'uploads/' });
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.get('/api/usuarios/:id', (req, res) => {
-  const id = req.params.id;
-  const usuario = {
-    id: id,
-    nome: 'Usuário',
-    foto: 'caminho-da-foto.jpg'
-  };
-  res.json(usuario);
-});
+app.use('/api/users', usersRouter);
 
-app.post('/api/usuarios/:id/foto', upload.single('foto'), (req, res) => {
-    const id = req.params.id;
-    const foto = req.file;
-    res.json({ message: 'Foto de perfil atualizada com sucesso.' });
-  });
-
-  const PORT = 3000;
-
-app.listen(PORT, () => {
-  console.log(`Servidor em execução na porta ${PORT}`);
+app.listen(3000, () => {
+  console.log('Servidor ouvindo na porta 3000');
 });
